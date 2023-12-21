@@ -1,0 +1,15 @@
+body {
+    padding: 10px;
+}
+
+#commentCard {
+    border: 1px solid lightgray;
+    width: auto;
+    display: inline-block;
+    padding: 10px;
+}
+
+#top-buttons {
+    display: flex;
+    justify-content: space-between;
+}

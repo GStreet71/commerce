@@ -1,0 +1,120 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+  <div class="container">
+    {% if message%}
+      {% if update %}
+      <div class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+      {% else %}
+      <div class="alert alert-danger" role="alert">
+        {{ message  }}
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <div class="container">
+    {% if not listing.active and user == listing.price.user %}
+      <div class="alert alert-warning" role="alert">
+        Congratulations! You won the <b>{{ listing.title }}</b>
+      </div>
+    {% endif%}
+  </div>
+
+  <div class="container">
+    {% if not listing.active and user == listing.owner %}
+      <div class="alert alert-secondary" role="alert">
+        Your auction has closed. <b> {{ listing.price.user }}</b> is the winner
+      </div>
+    {% endif%}
+  </div>
+
+  <div id="top-buttons" style="display: flex; justify-content: space-between">
+  {% if user.is_authenticated and listing.active %}
+    {% if checkWatchlist %}
+      {% if user == listing.price.user %}
+        <form method="POST" disabled="disabled">
+          {% csrf_token %}
+          <button class="btn btn-danger disabled">Remove from Watchlist</button>
+        </form>
+      {% else %}
+        <form action="{% url 'remove' id=listing.id %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Remove from Watchlist</button>
+        </form>
+      {% endif %}
+    {% else %}
+    <form action="{% url 'add' id=listing.id %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-info">Add to Watchlist</button>
+    </form>
+    {% endif %}
+    {% if checkSeller %}
+      <form action="{% url 'close' id=listing.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-dark">Close This Auction</button>
+      </form>
+    {% endif %}
+  {% endif%}
+  </div>
+
+  <h2>{{ listing.title }} </h2>
+  <div style="display: flex; justify-content: space-between">
+    <img src="{{ listing.image }}" alt="{{ listing.title }}" height="600px">
+    {% if user.is_authenticated and listing.active %}
+    <div id="bid-card" style="margin-top: 20vh">
+      <form action="{% url 'bid' id=listing.id %}" method="POST">
+        {% csrf_token %}
+        <div style="border: 1px solid lightgray; width: auto; display: inline-block; padding: 10px; margin-right: 50px; background-color: darkmagenta; color: white">
+          <div>
+            <label for="newBid">Bid</label>
+          </div>
+          <div>
+            <input type="number" style="width: 90px" min="0" name="newBid" placeholder="Bid">         
+          </div>
+          <div style="margin-top: 10px">
+            <button type="submit" class="btn btn-light">Place Bid</button>         
+          </div>
+        </div>
+      </form>
+    </div>    
+    {% endif %}
+  </div>  
+  <h4>{{ listing.description }} </h4>
+  <h5>Current Bid:<span style="color:red">${{ listing.price }}</span> by <span style="color: blue">{{ listing.price.user }}</span></h5>
+  <h6>Category: {{ listing.category }}</h6>
+  <h6>Seller: <span style="color:lightblue">{{ listing.owner }}</span></h6>
+  
+  <br/>
+  <br/>
+
+  <h2>Comments:</h2>
+  <ul class="list-group list-group-flush">
+    {% for comment in viewComments %}
+      <li class="list-group-item"> 
+        <h6>{{ comment.message }}</h6>
+        <br/> 
+        <p style="color: red">Posted by:<span style="color:blue">{{ comment.author }}</span></p>
+      </li>
+    {% endfor %}
+  </ul>
+  <br/>  
+  {% if user.is_authenticated and listing.active %}
+    <form action="{% url 'comment' id=listing.id %}" method="POST">
+      {% csrf_token %}
+      <div id="commentCard" style="border: 1px solid lightgray; width: auto; display: inline-block; padding:   10px; padding-right: 50px;">
+        <div>
+          <label for="newComment" style="color:blue">Leave A Comment</label>
+        </div>
+        <div>
+          <input type="text" name="newComment" placeholder="Comment">         
+        </div>
+        <div style="margin-top: 10px">
+          <button type="submit" class="btn btn-info">Submit Comment</button>         
+        </div>
+      </div>
+    </form>
+  {% endif %}
+{% endblock %}  

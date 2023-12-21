@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Filter by Category</h2>
+
+    <form method="post" id="categoryForm" action="{% url 'filter' %}">
+      {% csrf_token %}
+      {% for category in categories %}      
+          <button type="submit" class="btn btn-link" name="category_id" value="{{ category.id }}"> {{ category.categoryType }}</button><br/>
+      {% endfor %}
+    </form>
+
+    <!--script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const categoryButtons = document.querySelectorAll(".categoryBtn");
+            categoryButtons.forEach(button => {
+                button.addEventListener("click", function() {
+                    const categoryId = this.getAttribute("data-category-id");
+                    document.getElementById("categoryForm").action = "{% url 'filter' 0 %}".replace("0", categoryId);
+                    document.getElementById("categoryForm").submit();
+                });
+            });
+        });
+    </script-->
+{% endblock %}

@@ -3,12 +3,12 @@
 {% block body %}
     <h2>Filter by Category</h2>
 
-    <form method="post" id="categoryForm" action="{% url 'filter' %}">
-      {% csrf_token %}
-      {% for category in categories %}      
-          <button type="submit" class="btn btn-link" name="category_id" value="{{ category.id }}"> {{ category.categoryType }}</button><br/>
-      {% endfor %}
-    </form>
+    {% csrf_token %}
+    {% for category in categories %}
+    <a method="post" id="categoryForm" href="{% url 'filter/<int:category_id>/' %}">   
+        <button type="submit" class="btn btn-link" name="category_id" value="{{ category.id }}"> {{ category.categoryType }}</button><
+    </a><br/>
+    {% endfor %}
 
     <!--script>
         document.addEventListener("DOMContentLoaded", function() {

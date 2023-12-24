@@ -12,7 +12,7 @@ class Category(models.Model):
         return self.categoryType
     
 class Bid(models.Model):
-    bid = models.FloatField(default=0)
+    bid = models.DecimalField(decimal_places=2, max_digits=7)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="userBid", null=True, blank=True)
 
     def __str__(self):

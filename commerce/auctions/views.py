@@ -117,7 +117,7 @@ def filter(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
     viewFilter = Listing.objects.filter(active=True, category=category)
     categories = Category.objects.all()
-    return render(request, "auctions/filter.html/<category.id>", {
+    return render(request, "auctions/filter.html", {
         "listings": viewFilter,
         "categories": categories,
         "category": category

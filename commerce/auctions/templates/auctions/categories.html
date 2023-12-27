@@ -3,23 +3,10 @@
 {% block body %}
     <h2>Filter by Category</h2>
 
-    {% csrf_token %}
     {% for category in categories %}
-    <a method="post" id="categoryForm" href="{% url 'filter/<int:category_id>/' %}">   
-        <button type="submit" class="btn btn-link" name="category_id" value="{{ category.id }}"> {{ category.categoryType }}</button><
-    </a><br/>
+    <form method="post" id="categoryForm" action="{% url 'filter' category.id %}">
+      {% csrf_token %}      
+          <button type="submit" class="btn btn-link" name="category_id" value="{{ category.id }}"> {{ category.categoryType }}</button><br/>
+    </form>
     {% endfor %}
-
-    <!--script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const categoryButtons = document.querySelectorAll(".categoryBtn");
-            categoryButtons.forEach(button => {
-                button.addEventListener("click", function() {
-                    const categoryId = this.getAttribute("data-category-id");
-                    document.getElementById("categoryForm").action = "{% url 'filter' 0 %}".replace("0", categoryId);
-                    document.getElementById("categoryForm").submit();
-                });
-            });
-        });
-    </script-->
 {% endblock %}
